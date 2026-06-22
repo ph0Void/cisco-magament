@@ -19,6 +19,7 @@
 
 # production
 /build
+/extensions/*
 
 # misc
 .DS_Store
@@ -39,3 +40,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/prisma/generated/*

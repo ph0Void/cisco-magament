@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API de Cisco Packet Tracer</title>
+  <script src="socket.io.min.js"></script>
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+  <header class="header">
+    <h1>API de Cisco Packet Tracer</h1>
+    <span class="status-pill"><span id="status-dot" class="dot connecting"></span><span
+        id="status-text">conectando</span></span>
+  </header>
+
+  <main class="body">
+    <section class="card">
+      <h2>Puente</h2>
+      <div class="row"><span class="k">
+          Punto final</span><span class="v" id="endpoint"> http://127.0.0.1:7531
+        </span>
+      </div>
+      <div class="row"><span class="k">ID de socket</span><span class="v" id="sid">—</span></div>
+      <div class="row"><span class="k">Herramientas gestionadas</span><span class="v" id="tool-count">0</span></div>
+    </section>
+
+    <section class="card" style="flex:1; display:flex; flex-direction:column; min-height:0;">
+      <h2>Actividad</h2>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+  <script src="interface.js"></script>
+</body>
+
+</html>

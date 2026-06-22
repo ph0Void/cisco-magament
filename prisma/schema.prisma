@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/prisma/generated"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CLIENT
+}
+
+model User {
+  id String @id @default(cuid())
+
+  username String @unique
+  password String
+
+  role Role @default(CLIENT)
+
+  token String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chats            Chat[]
+  topologies       Topology[]
+  alerts           Alert[]
+  clientTopologies ClientTopology[]
+}
+
+model Chat {
+  id    String  @id @default(cuid())
+  title String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  chatId String
+  chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
+model Topology {
+  id String @id @default(cuid())
+
+  name String
+
+  description String?
+
+  packetTracerFile String?
+
+  topologyJson String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  alerts           Alert[]
+  logs             Log[]
+  clientTopologies ClientTopology[]
+}
+
+model Log {
+  id String @id @default(cuid())
+
+  level String
+
+  title String
+
+  content String
+
+  createdAt DateTime @default(now())
+
+  topologyId String
+  topology   Topology @relation(fields: [topologyId], references: [id], onDelete: Cascade)
+}
+
+model ClientTopology {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  topologyId String
+  topology   Topology @relation(fields: [topologyId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Alert {
+  id String @id @default(cuid())
+
+  title String
+
+  description String
+
+  severity String
+
+  resolved Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  topologyId String
+  topology   Topology @relation(fields: [topologyId], references: [id], onDelete: Cascade)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
