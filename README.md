@@ -5,7 +5,11 @@ Sistema avanzado de gestión, monitorización en tiempo real y automatización d
 Este proyecto unifica el mundo de las redes y el desarrollo de software moderno, permitiendo interpretar topologías mediante lenguaje natural o diagramas, inyectar configuraciones automáticamente en Packet Tracer, estructurar direccionamientos IP y auditar la infraestructura mediante un manejador de logs centralizado en tiempo real.
 
 📺 **Mira el proyecto en acción aquí:** 
-[Demo en YouTube](https://www.youtube.com/watch?v=oHHrTuEvRoY)
+
+https://github.com/user-attachments/assets/a1c13731-7216-4157-b088-6335641caca7
+
+
+ 
 
 ## 🚀 Características Principales
 
