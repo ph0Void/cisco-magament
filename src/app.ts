@@ -43,12 +43,12 @@ nextApp.prepare().then(() => {
 
     if (isPacketTracer) {
       console.log(
-        `✅ Extensión de Packet Tracer conectada por WebSocket [ID: ${socket.id}]`,
+        `Extensión de Packet Tracer conectada por WebSocket [ID: ${socket.id}]`,
       );
       ptSocket = socket;
     } else {
       console.log(
-        `🔌 Cliente del Dashboard / Agente de IA conectado [ID: ${socket.id}]`,
+        `Cliente del Dashboard / Agente de IA conectado [ID: ${socket.id}]`,
       );
       socket.join("dashboard-room");
       clientSockets.set(socket.id, socket);
@@ -59,19 +59,15 @@ nextApp.prepare().then(() => {
      * El agente de IA solicita ejecutar una acción física en la topología.
      */
     socket.on("tool_call", (data: ToolCallData) => {
-      console.log(
-        `📥 Solicitud de herramienta recibida [${data.tool_name}] (ID: ${data.tool_call_id})`,
-      );
-
       if (ptSocket && ptSocket.connected) {
         // Reenviar la solicitud de herramienta directamente a la extensión de Packet Tracer
         console.log(
-          `🔄 Reenviando [${data.tool_name}] a la interfaz activa de Packet Tracer...`,
+          `Reenviando [${data.tool_name}] a la interfaz activa de Packet Tracer...`,
         );
         ptSocket.emit("tool_call", data);
       } else {
         console.error(
-          `❌ Error: Packet Tracer no está conectado. No se puede ejecutar: ${data.tool_name}`,
+          `Error: Packet Tracer no está conectado. No se puede ejecutar: ${data.tool_name}`,
         );
 
         // Responder inmediatamente con error para evitar que el cliente de IA se quede en timeout
@@ -93,7 +89,7 @@ nextApp.prepare().then(() => {
      */
     socket.on("tool_result", (data: ToolResultData) => {
       console.log(
-        `🔄 Resultado de herramienta recibido desde Packet Tracer para ID: ${data.tool_call_id}`,
+        `Resultado de herramienta recibido desde Packet Tracer para ID: ${data.tool_call_id}`,
       );
 
       // A) Si fue una solicitud iniciada por una llamada HTTP tradicional
@@ -112,10 +108,10 @@ nextApp.prepare().then(() => {
     // Evento de desconexión
     socket.on("disconnect", () => {
       if (ptSocket?.id === socket.id) {
-        console.log("❌ Extensión de Cisco Packet Tracer desconectada");
+        console.log("Extensión de Cisco Packet Tracer desconectada");
         ptSocket = null;
       } else {
-        console.log(`🔌 Cliente del Dashboard desconectado [ID: ${socket.id}]`);
+        console.log(`Cliente del Dashboard desconectado [ID: ${socket.id}]`);
         clientSockets.delete(socket.id);
       }
     });

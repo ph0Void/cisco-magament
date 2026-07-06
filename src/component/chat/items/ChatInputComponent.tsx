@@ -4,7 +4,6 @@ import React, { useCallback, useState } from "react";
 import { useChat } from "@/context/ChatContext";
 import { toast } from "sonner";
 
-// AI Elements
 import {
   Conversation,
   ConversationContent,
@@ -33,7 +32,6 @@ import {
   usePromptInputAttachments,
 } from "@/components/ai-elements/prompt-input";
 
-// Shadcn UI
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -76,9 +74,9 @@ import { cn } from "@/lib/utils";
 import type { ToolExecution } from "@/hooks/useCiscoChat";
 import ToolCardInline from "../card/ToolCard";
 import AttachedImagePreviews from "./AttachedImagePreviews";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 
-// ── Main Chat Component ─────────────────────────────────────────────
 export function ChatInputComponent() {
   const {
     messages,
@@ -88,6 +86,7 @@ export function ChatInputComponent() {
   } = useChat();
 
   const [copiedMsgId, setCopiedMsgId] = useState<string | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState("Cisco Packet Tracer");
 
   const handleCopy = useCallback(async (text: string, msgId: string) => {
     await navigator.clipboard.writeText(text);
@@ -100,8 +99,6 @@ export function ChatInputComponent() {
     async (message: import("@/components/ai-elements/prompt-input").PromptInputMessage) => {
       const { text, files } = message;
       if (!text.trim() && files.length === 0) return;
-
-      // Build image data URLs from attached files
       const imageUrls = files.map((f) => f.url).filter(Boolean) as string[];
 
       try {
@@ -383,13 +380,69 @@ export function ChatInputComponent() {
 
               {/* Right side: model badge + submit */}
               <div className="flex items-center gap-2">
-                <Badge
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Badge
+                      variant="outline"
+                      className="px-2 h-5 font-mono hidden sm:flex items-center gap-1 text-muted-foreground border-border/50 cursor-pointer hover:bg-muted/50 select-none"
+                    >
+                      <Network size={8} />
+                      <span>{selectedProvider || "Cisco Packet Tracer"}</span>
+                      <ChevronDown size={8} className="opacity-60 ml-0.5" />
+                    </Badge>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="end" className="w-44 font-mono text-xs">
+                    {/* Opción 1: Cisco Packet Tracer */}
+                    <DropdownMenuItem
+                      onClick={() => setSelectedProvider("Cisco Packet Tracer")}
+                      className="cursor-pointer flex items-center gap-2"
+                    >
+                      <Network size={8} />
+                      Cisco Packet Tracer
+                    </DropdownMenuItem>
+
+                    {/* Opción 2: Cisco */}
+                    <DropdownMenuItem
+                      onClick={() => setSelectedProvider("Cisco")}
+                      className="cursor-pointer flex items-center gap-2"
+                    >
+                      <Network size={8} />
+                      Cisco
+                    </DropdownMenuItem>
+
+                    {/* Opción 3: Huawei */}
+                    <DropdownMenuItem
+                      onClick={() => setSelectedProvider("Huawei")}
+                      className="cursor-pointer flex items-center gap-2"
+                    >
+                      <Network size={8} />
+                      Huawei
+                    </DropdownMenuItem>
+
+                    {/* Opción 4: Aruba */}
+                    <DropdownMenuItem
+                      onClick={() => setSelectedProvider("Aruba")}
+                      className="cursor-pointer flex items-center gap-2"
+                    >
+                      <Network size={8} />
+                      Aruba
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+
+                {/* <Badge
                   variant="outline"
                   className="px-2 h-5 font-mono hidden sm:flex items-center gap-1 text-muted-foreground border-border/50"
                 >
                   <Network size={8} />
                   Cisco AI
-                </Badge>
+                </Badge> */}
+
+
+
                 <PromptInputSubmit
                   id="btn-send-message"
                   status={isLoading ? "streaming" : "ready"}
